@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_30_102448) do
+ActiveRecord::Schema.define(version: 2018_12_02_205045) do
 
   create_table "autors", force: :cascade do |t|
     t.string "name"
-    t.string "surname"
+    t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "token"
+    t.string "password_confirmation", limit: 20
   end
 
   create_table "books", force: :cascade do |t|

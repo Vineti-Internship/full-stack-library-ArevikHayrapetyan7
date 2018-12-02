@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :update, :destroy]
+  before_action :require_login, except: [:index, :show]
 
   # GET /books
   def index
@@ -15,7 +15,8 @@ class BooksController < ApplicationController
 
   # POST /books
   def create
-    @book = Book.new(book_params)
+    @book = Book.new(bparams)
+    @book.autor = curautor
 
     if @book.save
       render json: @book, status: :created, location: @book
@@ -26,7 +27,7 @@ class BooksController < ApplicationController
 
   # PATCH/PUT /books/1
   def update
-    if @book.update(book_params)
+    if @book.update(bparams)
       render json: @book
     else
       render json: @book.errors, status: :unprocessable_entity
@@ -45,7 +46,7 @@ class BooksController < ApplicationController
     end
 
     # Only allow a trusted parameter "white list" through.
-    def book_params
-      params.require(:book).permit(:title, :body, :autor_id)
+    def bparams
+      params.require(:book).permit(:title, :body)
     end
 end

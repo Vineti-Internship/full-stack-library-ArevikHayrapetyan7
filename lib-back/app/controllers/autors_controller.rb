@@ -1,5 +1,5 @@
 class AutorsController < ApplicationController
-  before_action :set_autor, only: [:show, :update, :destroy]
+  before_action :require_login, except: [:index, :show, :create]
 
   # GET /autors
   def index
@@ -15,10 +15,11 @@ class AutorsController < ApplicationController
 
   # POST /autors
   def create
-    @autor = Autor.new(autor_params)
+
+    @autor = Autor.new(aparams)
 
     if @autor.save
-      render json: @autor, status: :created, location: @autor
+      render json: {token: @autor.token}
     else
       render json: @autor.errors, status: :unprocessable_entity
     end
@@ -26,7 +27,7 @@ class AutorsController < ApplicationController
 
   # PATCH/PUT /autors/1
   def update
-    if @autor.update(autor_params)
+    if @autor.update(aparams)
       render json: @autor
     else
       render json: @autor.errors, status: :unprocessable_entity
@@ -45,7 +46,7 @@ class AutorsController < ApplicationController
     end
 
     # Only allow a trusted parameter "white list" through.
-    def autor_params
-      params.require(:autor).permit(:name, :surname)
+    def aparams
+      params.require(:autor).permit(:name, :surname,:password, :password_confirmation)
     end
 end
